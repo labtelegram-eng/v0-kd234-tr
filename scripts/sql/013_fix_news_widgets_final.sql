@@ -45,4 +45,3 @@ CREATE TRIGGER trigger_update_news_widgets_updated_at
 
 -- Проверяем что данные добавились
 SELECT 'Создано виджетов: ' || COUNT(*) as result FROM news_widgets;
-</sql>

@@ -333,7 +333,9 @@ export function NewsSection() {
         </Link>
       </div>
 
-      <NewsWidgetsContainer />
+      <div className="flex justify-center mb-6">
+        <NewsWidgetsContainer />
+      </div>
 
       {/* Desktop */}
       <div className="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-6">
