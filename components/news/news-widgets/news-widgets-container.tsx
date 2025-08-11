@@ -11,21 +11,24 @@ import { QuickLinksWidget } from "./quick-links-widget"
 import styles from "./h-scroll.module.css"
 
 interface Widget {
-  id: string
+  id: number
   type: string
   title: string
-  is_active: boolean
-  order_index: number
+  isActive: boolean
+  order: number
   settings: any
+  createdAt: string
+  updatedAt: string
 }
 
 const WIDGET_COMPONENTS = {
   time: TimeWidget,
   emergency: EmergencyServicesWidget,
   embassy: EmbassyWidget,
-  tourist_help: TouristHelpWidget,
-  safety_status: SafetyStatusWidget,
-  quick_links: QuickLinksWidget,
+  "tourist-help": TouristHelpWidget, // исправил название типа с подчеркиванием
+  safety: SafetyStatusWidget, // исправил название типа
+  "quick-links": QuickLinksWidget,
+  custom: () => null, // добавил поддержку пользовательских виджетов
 }
 
 export function NewsWidgetsContainer() {
@@ -41,16 +44,21 @@ export function NewsWidgetsContainer() {
 
   const fetchWidgets = async () => {
     try {
+      console.log("🔄 Fetching news widgets...")
       const response = await fetch("/api/news-widgets")
       if (response.ok) {
         const data = await response.json()
-        const activeWidgets = data
-          .filter((w: Widget) => w.is_active)
-          .sort((a: Widget, b: Widget) => a.order_index - b.order_index)
+        console.log("📦 Received widgets data:", data)
+        const activeWidgets = (data.widgets || [])
+          .filter((w: Widget) => w.isActive)
+          .sort((a: Widget, b: Widget) => a.order - b.order)
+        console.log("✅ Active widgets:", activeWidgets)
         setWidgets(activeWidgets)
+      } else {
+        console.error("❌ Failed to fetch widgets:", response.status, response.statusText)
       }
     } catch (error) {
-      console.error("Error fetching widgets:", error)
+      console.error("❌ Error fetching widgets:", error)
     } finally {
       setLoading(false)
     }
@@ -83,7 +91,16 @@ export function NewsWidgetsContainer() {
   }
 
   if (widgets.length === 0) {
-    return null
+    return (
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900">Полезные виджеты</h2>
+        </div>
+        <div className="text-center py-8 text-gray-500">
+          <p>Виджеты не найдены. Проверьте подключение к базе данных.</p>
+        </div>
+      </div>
+    )
   }
 
   const canScrollLeft = currentIndex > 0
@@ -122,7 +139,10 @@ export function NewsWidgetsContainer() {
         >
           {widgets.map((widget) => {
             const WidgetComponent = WIDGET_COMPONENTS[widget.type as keyof typeof WIDGET_COMPONENTS]
-            if (!WidgetComponent) return null
+            if (!WidgetComponent) {
+              console.warn(`⚠️ Unknown widget type: ${widget.type}`)
+              return null
+            }
 
             return (
               <div key={widget.id} className={styles.scrollItem}>
