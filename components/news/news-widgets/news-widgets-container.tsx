@@ -60,9 +60,12 @@ export function NewsWidgetsContainer() {
 
   if (loading) {
     return (
-      <div className="mb-8">
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex space-x-4 px-4 min-w-max">
+      <div className="mb-8 flex justify-center">
+        <div
+          className="overflow-x-auto scrollbar-hide max-w-full"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          <div className="flex space-x-4 px-4">
             {[...Array(5)].map((_, i) => (
               <div key={i} className="w-48 h-24 bg-gray-200 rounded-lg animate-pulse flex-shrink-0" />
             ))}
@@ -83,9 +86,16 @@ export function NewsWidgetsContainer() {
   }
 
   return (
-    <div className="mb-8">
-      <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex space-x-4 px-4 min-w-max">
+    <div className="mb-8 flex justify-center">
+      <div
+        className="overflow-x-auto scrollbar-hide max-w-full"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        <div className="flex space-x-4 px-4">
           {widgets.map((widget) => {
             const WidgetComponent = WIDGET_COMPONENTS[widget.type as keyof typeof WIDGET_COMPONENTS]
             if (!WidgetComponent) {
@@ -94,7 +104,10 @@ export function NewsWidgetsContainer() {
             }
 
             return (
-              <div key={widget.id} className="w-48 h-24 flex-shrink-0">
+              <div
+                key={widget.id}
+                className="w-48 h-24 flex-shrink-0 transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              >
                 <WidgetComponent {...widget.settings} />
               </div>
             )
