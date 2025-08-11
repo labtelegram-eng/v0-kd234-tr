@@ -61,10 +61,10 @@ export function NewsWidgetsContainer() {
   if (loading) {
     return (
       <div className="mb-8">
-        <div className="flex justify-center">
-          <div className="flex space-x-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-64 h-32 bg-gray-200 rounded-lg animate-pulse" />
+        <div className="overflow-x-auto scrollbar-hide">
+          <div className="flex space-x-4 px-4 min-w-max">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-48 h-24 bg-gray-200 rounded-lg animate-pulse flex-shrink-0" />
             ))}
           </div>
         </div>
@@ -84,8 +84,8 @@ export function NewsWidgetsContainer() {
 
   return (
     <div className="mb-8">
-      <div className="flex justify-center">
-        <div className="flex flex-wrap justify-center gap-4 max-w-6xl">
+      <div className="overflow-x-auto scrollbar-hide">
+        <div className="flex space-x-4 px-4 min-w-max">
           {widgets.map((widget) => {
             const WidgetComponent = WIDGET_COMPONENTS[widget.type as keyof typeof WIDGET_COMPONENTS]
             if (!WidgetComponent) {
@@ -94,7 +94,7 @@ export function NewsWidgetsContainer() {
             }
 
             return (
-              <div key={widget.id} className="flex-shrink-0">
+              <div key={widget.id} className="w-48 h-24 flex-shrink-0">
                 <WidgetComponent {...widget.settings} />
               </div>
             )
