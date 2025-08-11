@@ -1,0 +1,143 @@
+/* Brand gradient variables (tweak to match your login button) */
+:root {
+--brand-from: #10b981; /* emerald-500 */
+--brand-to: #14b8a6;   /* teal-500 */
+}
+
+/* Shared gradient utility */
+.brand-gradient {
+background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+}
+
+/* Dark glass card */
+.notice-card {
+position: relative;
+color: #fff;
+background: linear-gradient(
+  to bottom,
+  rgba(10, 10, 12, 0.85),
+  rgba(14, 14, 16, 0.82)
+);
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 16px 16px 0 0;     /* round top only */
+border-bottom-left-radius: 0;      /* ensure bottom corners are square */
+border-bottom-right-radius: 0;     /* ensure bottom corners are square */
+box-shadow:
+  0 10px 30px rgba(0, 0, 0, 0.35),
+  0 2px 10px rgba(0, 0, 0, 0.25);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+}
+
+/* Entry animation */
+.notice-enter {
+opacity: 0;
+transform: translateY(12px) scale(0.995);
+}
+
+.notice-enter-active {
+opacity: 1;
+transform: translateY(0) scale(1);
+}
+
+/* Title/body colors */
+.notice-title {
+color: #fff;
+}
+
+.notice-body {
+color: rgba(255, 255, 255, 0.9);
+}
+
+/* CTA button (solid gradient) */
+.notice-cta {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+padding: 9px 14px;
+border-radius: 12px;
+font-weight: 600;
+font-size: 14px;
+color: #fff;
+border: 0;
+outline: 0;
+background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+box-shadow: 0 4px 18px rgba(20, 184, 166, 0.35);
+transition: transform 120ms ease, box-shadow 180ms ease, opacity 120ms ease;
+}
+
+.notice-cta:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+box-shadow: none;
+}
+
+.notice-cta:not(:disabled):hover {
+transform: translateY(-1px);
+box-shadow: 0 6px 22px rgba(20, 184, 166, 0.45);
+}
+
+.notice-cta:focus-visible {
+box-shadow:
+  0 0 0 2px rgba(255, 255, 255, 0.3),
+  0 6px 22px rgba(20, 184, 166, 0.45);
+}
+
+/* Circular close button: NO border/outline on the button itself.
+ Keep only the ring (SVG) and the X icon. */
+.notice-close {
+position: relative;
+width: 36px;
+height: 36px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+border: 0;           /* No border */
+outline: 0;          /* No outline */
+background: transparent; /* Transparent background */
+color: #fff;
+border-radius: 9999px;    /* round */
+transition: opacity 160ms ease, transform 120ms ease;
+}
+
+.notice-close:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+}
+
+.notice-close:not(:disabled):hover {
+transform: translateY(-1px);
+}
+
+.notice-close:focus-visible {
+/* Accessible focus without showing a "border" */
+box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.28);
+}
+
+/* SVG ring inside the close button */
+.notice-close .ring {
+position: absolute;
+inset: 0;
+pointer-events: none;
+}
+
+.notice-close .ring .track {
+stroke: rgba(255, 255, 255, 0.25); /* subtle circle track */
+}
+
+.notice-close .ring .progress {
+stroke: var(--brand-to); /* accent stroke */
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+.notice-enter,
+.notice-enter-active {
+  transition: none !important;
+  transform: none !important;
+}
+.notice-cta,
+.notice-close {
+  transition: none !important;
+}
+}

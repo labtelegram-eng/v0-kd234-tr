@@ -1,0 +1,660 @@
+/\`\`\`typescript
+// lib/simple-database.ts
+interface PartnerNotification {
+id: number
+title: string
+content: string
+ctaText: string
+ctaUrl: string
+isActive: boolean
+showAfterSeconds: number
+showOnPages: {
+  home: boolean
+  blog: boolean
+  news: boolean
+  destinations: boolean
+}
+limitShows: boolean
+maxShowsPerSession: number
+showRandomly: boolean
+createdAt: string
+updatedAt: string
+priority?: number
+}
+
+let partnerNotifications: PartnerNotification[] = []
+
+function getPartnerNotifications(): PartnerNotification[] {
+try {
+  const storedNotifications = localStorage.getItem('partnerNotifications')
+  return storedNotifications ? JSON.parse(storedNotifications) : []
+} catch (error) {
+  console.error('Error getting partner notifications from localStorage:', error)
+  return []
+}
+}
+
+function savePartnerNotifications(notifications: PartnerNotification[]): void {
+try {
+  localStorage.setItem('partnerNotifications', JSON.stringify(notifications))
+} catch (error) {
+  console.error('Error saving partner notifications to localStorage:', error)
+}
+}
+
+export function getAllPartnerNotifications(): PartnerNotification[] {
+return getPartnerNotifications()
+}
+
+export function createPartnerNotification(data: {
+title: string
+content: string
+ctaText: string
+ctaUrl: string
+showAfterSeconds: number
+showOnPages: {
+  home: boolean
+  blog: boolean
+  news: boolean
+  destinations: boolean
+}
+limitShows?: boolean
+maxShowsPerSession?: number
+showRandomly?: boolean
+priority?: number
+}): { success: boolean; error?: string; notification?: PartnerNotification } {
+try {
+  const notifications = getPartnerNotifications()
+  
+  const newNotification: PartnerNotification = {
+    id: Math.max(0, ...notifications.map(n => n.id)) + 1,
+    title: data.title,
+    content: data.content,
+    ctaText: data.ctaText,
+    ctaUrl: data.ctaUrl,
+    isActive: true,
+    showAfterSeconds: data.showAfterSeconds,
+    showOnPages: data.showOnPages,
+    limitShows: data.limitShows || false,
+    maxShowsPerSession: data.maxShowsPerSession || 1,
+    showRandomly: data.showRandomly || false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    priority: data.priority ?? 1,
+  }
+
+  notifications.push(newNotification)
+  savePartnerNotifications(notifications)
+
+  return { success: true, notification: newNotification }
+} catch (error) {
+  return { success: false, error: "Ошибка при создании уведомления" }
+}
+}
+
+export function updatePartnerNotification(id: number, data: {
+title?: string
+content?: string
+ctaText?: string
+ctaUrl?: string
+isActive?: boolean
+showAfterSeconds?: number
+showOnPages?: {
+  home?: boolean
+  blog?: boolean
+  news?: boolean
+  destinations?: boolean
+}
+limitShows?: boolean
+maxShowsPerSession?: number
+showRandomly?: boolean
+priority?: number
+}): { success: boolean; error?: string; notification?: PartnerNotification } {
+try {
+  const notifications = getPartnerNotifications()
+  const index = notifications.findIndex(n => n.id === id)
+
+  if (index === -1) {
+    return { success: false, error: "Уведомление не найдено" }
+  }
+
+  notifications[index] = {
+    ...notifications[index],
+    ...data,
+    showOnPages: {
+      ...notifications[index].showOnPages,
+      ...(data.showOnPages || {})
+    },
+    updatedAt: new Date().toISOString(),
+  }
+
+  savePartnerNotifications(notifications)
+  return { success: true, notification: notifications[index] }
+} catch (error) {
+  return { success: false, error: "Ошибка при обновлении уведомления" }
+}
+}
+
+export function deletePartnerNotification(id: number): { success: boolean; error?: string } {
+try {
+  const notifications = getPartnerNotifications()
+  const index = notifications.findIndex(n => n.id === id)
+
+  if (index === -1) {
+    return { success: false, error: "Уведомление не найдено" }
+  }
+
+  notifications.splice(index, 1)
+  savePartnerNotifications(notifications)
+
+  return { success: true }
+} catch (error) {
+  return { success: false, error: "Ошибка при удалении уведомления" }
+}
+}
+
+// app/api/partner-notification/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { 
+getAllPartnerNotifications, 
+createPartnerNotification, 
+updatePartnerNotification, 
+deletePartnerNotification,
+} from '@/lib/simple-database'
+
+export async function GET(request: NextRequest) {
+try {
+  const notifications = getAllPartnerNotifications()
+  return NextResponse.json({
+    success: true,
+    notifications
+  })
+} catch (error) {
+  console.error('Error fetching partner notifications:', error)
+  return NextResponse.json(
+    { success: false, error: 'Ошибка при получении уведомлений' },
+    { status: 500 }
+  )
+}
+}
+
+export async function POST(request: NextRequest) {
+try {
+  // NOTE: Админ-проверка отключена в демо-среде next-lite, где localStorage недоступен в Route Handler.
+  const body = await request.json()
+  const { 
+    title, 
+    content, 
+    ctaText, 
+    ctaUrl, 
+    showAfterSeconds, 
+    showOnPages,
+    limitShows,
+    maxShowsPerSession,
+    showRandomly,
+    priority
+  } = body
+
+  if (!title || !content || !ctaText || !ctaUrl) {
+    return NextResponse.json(
+      { success: false, error: 'Заполните все обязательные поля' },
+      { status: 400 }
+    )
+  }
+
+  const result = createPartnerNotification({
+    title,
+    content,
+    ctaText,
+    ctaUrl,
+    showAfterSeconds: showAfterSeconds || 30,
+    showOnPages: showOnPages || {
+      home: true,
+      blog: true,
+      news: true,
+      destinations: true
+    },
+    limitShows: limitShows || false,
+    maxShowsPerSession: maxShowsPerSession || 1,
+    showRandomly: showRandomly || false,
+    priority: typeof priority === 'number' ? priority : 1,
+  })
+
+  if (result.success) {
+    return NextResponse.json({
+      success: true,
+      notification: result.notification
+    })
+  } else {
+    return NextResponse.json(
+      { success: false, error: result.error },
+      { status: 400 }
+    )
+  }
+} catch (error) {
+  console.error('Error creating partner notification:', error)
+  return NextResponse.json(
+    { success: false, error: 'Ошибка при создании уведомления' },
+    { status: 500 }
+  )
+}
+}
+
+export async function PUT(request: NextRequest) {
+try {
+  // NOTE: Админ-проверка отключена в демо-среде.
+  const body = await request.json()
+  const { id, ...updateData } = body
+
+  if (!id) {
+    return NextResponse.json(
+      { success: false, error: 'ID уведомления обязателен' },
+      { status: 400 }
+    )
+  }
+
+  const result = updatePartnerNotification(id, updateData)
+
+  if (result.success) {
+    return NextResponse.json({
+      success: true,
+      notification: result.notification
+    })
+  } else {
+    return NextResponse.json(
+      { success: false, error: result.error },
+      { status: 400 }
+    )
+  }
+} catch (error) {
+  console.error('Error updating partner notification:', error)
+  return NextResponse.json(
+    { success: false, error: 'Ошибка при обновлении уведомления' },
+    { status: 500 }
+  )
+}
+}
+
+export async function DELETE(request: NextRequest) {
+try {
+  // NOTE: Админ-проверка отключена в демо-среде.
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get('id')
+
+  if (!id) {
+    return NextResponse.json(
+      { success: false, error: 'ID уведомления обязателен' },
+      { status: 400 }
+    )
+  }
+
+  const result = deletePartnerNotification(parseInt(id))
+
+  if (result.success) {
+    return NextResponse.json({
+      success: true,
+      message: 'Уведомление успешно удалено'
+    })
+  } else {
+    return NextResponse.json(
+      { success: false, error: result.error },
+      { status: 400 }
+    )
+  }
+} catch (error) {
+  console.error('Error deleting partner notification:', error)
+  return NextResponse.json(
+    { success: false, error: 'Ошибка при удалении уведомления' },
+    { status: 500 }
+  )
+}
+}
+
+// app/admin/partner-notifications/page.tsx
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
+
+interface ShowOnPages {
+home: boolean
+blog: boolean
+news: boolean
+destinations: boolean
+}
+
+interface PartnerNotification {
+id: number
+title: string
+content: string
+ctaText: string
+ctaUrl: string
+isActive: boolean
+showAfterSeconds: number
+showOnPages: ShowOnPages
+limitShows: boolean
+maxShowsPerSession: number
+showRandomly: boolean
+createdAt: string
+updatedAt: string
+priority?: number
+}
+
+type FormState = {
+title: string
+content: string
+ctaText: string
+ctaUrl: string
+showAfterSeconds: number
+showOnPages: ShowOnPages
+limitShows: boolean
+maxShowsPerSession: number
+showRandomly: boolean
+priority: number
+}
+
+const defaultForm: FormState = {
+title: '',
+content: '',
+ctaText: '',
+ctaUrl: '',
+showAfterSeconds: 30,
+showOnPages: { home: true, blog: true, news: true, destinations: true },
+limitShows: false,
+maxShowsPerSession: 1,
+showRandomly: false,
+priority: 1,
+}
+
+export default function PartnerNotificationsPage() {
+const [notifications, setNotifications] = useState<PartnerNotification[]>([])
+const [form, setForm] = useState<FormState>(defaultForm)
+const [isEditMode, setIsEditMode] = useState(false)
+const [selectedId, setSelectedId] = useState<number | null>(null)
+
+useEffect(() => {
+  fetchNotifications()
+}, [])
+
+const fetchNotifications = async () => {
+  try {
+    const response = await fetch('/api/partner-notification')
+    const data = await response.json()
+
+    if (data.success) {
+      setNotifications(data.notifications)
+    } else {
+      alert(`Ошибка при загрузке уведомлений: ${data.error}`)
+    }
+  } catch (error) {
+    console.error('Ошибка при загрузке уведомлений:', error)
+    alert('Ошибка при загрузке уведомлений')
+  }
+}
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  const payload = {
+    ...form,
+    id: selectedId,
+  }
+
+  try {
+    const url = isEditMode ? '/api/partner-notification' : '/api/partner-notification'
+    const method = isEditMode ? 'PUT' : 'POST'
+
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+
+    const data = await response.json()
+
+    if (data.success) {
+      fetchNotifications()
+      closeEdit()
+    } else {
+      alert(`Ошибка: ${data.error}`)
+    }
+  } catch (error) {
+    console.error('Ошибка при сохранении:', error)
+    alert('Ошибка при сохранении')
+  }
+}
+
+const openEdit = (item: PartnerNotification) => {
+  setIsEditMode(true)
+  setSelectedId(item.id)
+  setForm({
+    title: item.title,
+    content: item.content,
+    ctaText: item.ctaText,
+    ctaUrl: item.ctaUrl,
+    showAfterSeconds: item.showAfterSeconds,
+    showOnPages: item.showOnPages,
+    limitShows: item.limitShows ?? false,
+    maxShowsPerSession: item.maxShowsPerSession ?? 1,
+    showRandomly: item.showRandomly ?? false,
+    priority: (typeof item.priority === 'number' ? item.priority : 1),
+  })
+}
+
+const closeEdit = () => {
+  setIsEditMode(false)
+  setSelectedId(null)
+  setForm(defaultForm)
+}
+
+const handleDelete = async (id: number) => {
+  if (confirm('Вы уверены, что хотите удалить это уведомление?')) {
+    try {
+      const response = await fetch(`/api/partner-notification?id=${id}`, {
+        method: 'DELETE',
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        fetchNotifications()
+      } else {
+        alert(`Ошибка при удалении: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Ошибка при удалении:', error)
+      alert('Ошибка при удалении')
+    }
+  }
+}
+
+return (
+  <div className="container mx-auto p-4">
+    <h1 className="text-2xl font-bold mb-4">Управление партнерскими уведомлениями</h1>
+
+    <div className="mb-4">
+      {!isEditMode && (
+        <Button onClick={() => setIsEditMode(true)}>Добавить уведомление</Button>
+      )}
+      {isEditMode && (
+        <Button onClick={closeEdit}>Отмена</Button>
+      )}
+    </div>
+
+    {isEditMode && (
+      <form onSubmit={handleSubmit} className="max-w-2xl">
+        <div>
+          <Label htmlFor="title">Заголовок *</Label>
+          <Input
+            id="title"
+            value={form.title}
+            onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
+            placeholder="Введите заголовок"
+            required
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="content">Текст уведомления *</Label>
+          <Textarea
+            id="content"
+            value={form.content}
+            onChange={(e) => setForm(prev => ({ ...prev, content: e.target.value }))}
+            placeholder="Введите текст уведомления..."
+            rows={4}
+            required
+          />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div>
+            <Label htmlFor="ctaText">Текст кнопки *</Label>
+            <Input
+              id="ctaText"
+              value={form.ctaText}
+              onChange={(e) => setForm(prev => ({ ...prev, ctaText: e.target.value }))}
+              placeholder="Узнать больше"
+              required
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="showAfterSeconds">Задержка (сек)</Label>
+            <Input
+              id="showAfterSeconds"
+              type="number"
+              min={1}
+              max={600}
+              value={form.showAfterSeconds}
+              onChange={(e) => setForm(prev => ({
+                ...prev,
+                showAfterSeconds: Math.max(1, Math.min(600, parseInt(e.target.value) || 30))
+              }))}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="priority">Приоритет</Label>
+            <Input
+              id="priority"
+              type="number"
+              min={1}
+              max={10}
+              value={form.priority}
+              onChange={(e) => setForm(prev => ({
+                ...prev,
+                priority: Math.max(1, Math.min(10, parseInt(e.target.value) || 1))
+              }))}
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label>Показывать на страницах:</Label>
+          <div className="flex flex-col space-y-2">
+            <div>
+              <Checkbox
+                id="home"
+                checked={form.showOnPages.home}
+                onCheckedChange={(checked) => setForm(prev => ({ ...prev, showOnPages: { ...prev.showOnPages, home: checked ?? true } }))}
+              />
+              <Label htmlFor="home" className="ml-2">Главная</Label>
+            </div>
+            <div>
+              <Checkbox
+                id="blog"
+                checked={form.showOnPages.blog}
+                onCheckedChange={(checked) => setForm(prev => ({ ...prev, showOnPages: { ...prev.showOnPages, blog: checked ?? true } }))}
+              />
+              <Label htmlFor="blog" className="ml-2">Блог</Label>
+            </div>
+            <div>
+              <Checkbox
+                id="news"
+                checked={form.showOnPages.news}
+                onCheckedChange={(checked) => setForm(prev => ({ ...prev, showOnPages: { ...prev.showOnPages, news: checked ?? true } }))}
+              />
+              <Label htmlFor="news" className="ml-2">Новости</Label>
+            </div>
+            <div>
+              <Checkbox
+                id="destinations"
+                checked={form.showOnPages.destinations}
+                onCheckedChange={(checked) => setForm(prev => ({ ...prev, showOnPages: { ...prev.showOnPages, destinations: checked ?? true } }))}
+              />
+              <Label htmlFor="destinations" className="ml-2">Направления</Label>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="limitShows"
+            checked={form.limitShows}
+            onCheckedChange={(checked) => setForm(prev => ({ ...prev, limitShows: checked ?? false }))}
+          />
+          <Label htmlFor="limitShows">Ограничить показы</Label>
+        </div>
+
+        {form.limitShows && (
+          <div>
+            <Label htmlFor="maxShowsPerSession">Макс. показов за сессию</Label>
+            <Input
+              id="maxShowsPerSession"
+              type="number"
+              min={1}
+              max={10}
+              value={form.maxShowsPerSession}
+              onChange={(e) => setForm(prev => ({
+                ...prev,
+                maxShowsPerSession: Math.max(1, Math.min(10, parseInt(e.target.value) || 1))
+              }))}
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="showRandomly"
+            checked={form.showRandomly}
+            onCheckedChange={(checked) => setForm(prev => ({ ...prev, showRandomly: checked ?? false }))}
+          />
+          <Label htmlFor="showRandomly">Показывать случайно</Label>
+        </div>
+
+        <Button type="submit" disabled={!form.title || !form.content || !form.ctaText || !form.ctaUrl}>
+          Сохранить
+        </Button>
+      </form>
+    )}
+
+    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {notifications.map((item) => (
+        <div key={item.id} className="border rounded-md p-4">
+          <h3 className="text-lg font-semibold">{item.title}</h3>
+          <p className="text-gray-600">{item.content}</p>
+          <div className="mt-2 flex flex-col gap-1">
+            <a href={item.ctaUrl} className="text-blue-500 hover:underline">{item.ctaText}</a>
+            <span className="text-xs text-gray-500">Задержка: {item.showAfterSeconds} сек</span>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-medium text-gray-500">Приоритет:</span>
+              <span className="text-xs text-gray-700">{item.priority ?? 1}</span>
+            </div>
+          </div>
+          <div className="mt-4 flex justify-end gap-2">
+            <Button size="sm" onClick={() => openEdit(item)}>Редактировать</Button>
+            <Button size="sm" variant="destructive" onClick={() => handleDelete(item.id)}>Удалить</Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)
+}
+\`\`\`

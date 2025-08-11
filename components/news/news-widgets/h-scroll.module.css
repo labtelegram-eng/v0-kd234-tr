@@ -1,0 +1,75 @@
+/* Styled horizontal scrollbar and soft edge fades. */
+/* Works in WebKit (Chrome/Safari) and Firefox. */
+
+.scroller {
+  /* Make horizontal scroll feel natural and avoid parent scroll hijacking */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  /* Always show a slimmer bar on desktop */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #d1d5db #f3f4f6; /* thumb track */
+}
+
+/* Dark mode colors */
+.dark .scroller {
+  scrollbar-color: #9ca3af #1f2937;
+}
+
+/* WebKit-based browsers */
+.scroller::-webkit-scrollbar {
+  height: 10px; /* visible bottom bar on desktop */
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #f9fafb, #f3f4f6);
+  border-radius: 9999px;
+}
+
+.dark .scroller::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #d1d5db, #9ca3af);
+  border-radius: 9999px;
+  border: 2px solid #f3f4f6; /* create a pill look */
+}
+
+.dark .scroller::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #4b5563, #6b7280);
+  border-color: #111827;
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #9ca3af, #6b7280);
+}
+
+/* Edge fade indicators (subtle hint to scroll) */
+.edgeFade {
+  position: relative;
+}
+
+/* Leave space above the scrollbar so fades don't cover it (bottom: 14px) */
+.edgeFade::before,
+.edgeFade::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 14px;
+  width: 24px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* The widget section surface is white, so fades blend into it */
+.edgeFade::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+}
+
+.edgeFade::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+}
+
+/* Dark mode keeps popover/card surfaces white in this project, so white fades are still correct. */

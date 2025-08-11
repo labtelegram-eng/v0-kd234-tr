@@ -1,0 +1,962 @@
+/* Search Component Styles */
+
+/* Search container base styles */
+.search-container {
+  position: relative;
+  z-index: 10;
+  overflow: visible !important;
+}
+
+/* Search parent container */
+.search-parent-container {
+  overflow: visible !important;
+  position: relative;
+}
+
+/* Base search container */
+.search-container {
+  position: relative;
+  overflow: visible !important;
+  z-index: 999998;
+}
+
+/* Search input wrapper */
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 9999px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input-wrapper:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.search-input-wrapper.focused {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.search-input-wrapper.hovered {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 4px
+    rgba(139, 92, 246, 0.5);
+}
+
+/* Search icons */
+.search-icon {
+  color: rgb(156, 163, 175);
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.search-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: white;
+  border-radius: 9999px;
+  margin-left: 0.25rem;
+}
+
+.search-icon-container.large {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.search-icon {
+  color: rgb(156, 163, 175);
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.search-icon.large {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.search-icon {
+  @apply absolute left-4 w-5 h-5 text-gray-400 pointer-events-none;
+}
+
+.search-clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: rgb(156, 163, 175);
+  transition: color 0.2s;
+  margin-right: 0.5rem;
+}
+
+.search-clear-button:hover {
+  color: rgb(75, 85, 99);
+}
+
+.search-clear-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.search-clear-button {
+  @apply absolute right-4 w-5 h-5 text-gray-400 hover:text-gray-600 cursor-pointer;
+  @apply transition-colors duration-200;
+}
+
+/* Main search input styles */
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgb(17, 24, 39);
+}
+
+.search-input::placeholder {
+  color: rgb(107, 114, 128);
+}
+
+.search-input.large {
+  padding: 1rem;
+  font-size: 1.125rem;
+}
+
+.search-input {
+  @apply w-full px-4 py-3 pl-12 pr-12 text-gray-900 placeholder-gray-500 bg-white border border-gray-300 rounded-full shadow-sm;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  @apply transition-all duration-200;
+  font-size: 16px; /* Prevents zoom on mobile */
+}
+
+.search-input:focus {
+  @apply shadow-md;
+}
+
+.search-input:hover {
+  @apply border-gray-400;
+}
+
+/* Remove all focus outlines and borders */
+.search-input:focus,
+.search-input:focus-visible,
+.search-input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  ring: none !important;
+}
+
+/* Override any Tailwind focus styles */
+input[type="text"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.search-input-wrapper {
+  @apply relative flex items-center;
+}
+
+/* Clear button */
+.search-clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  color: rgb(156, 163, 175);
+  transition: color 0.2s;
+  margin-right: 0.5rem;
+}
+
+.search-clear-button:hover {
+  color: rgb(75, 85, 99);
+}
+
+.search-clear-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Submit button */
+.search-submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  color: white;
+  font-weight: 500;
+  border-radius: 9999px;
+  margin-right: 0.25rem;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to right, rgb(16, 185, 129), rgb(20, 184, 166));
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.search-submit-button.large {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.search-submit-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, rgb(139, 92, 246), rgb(147, 51, 234));
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.25);
+}
+
+.search-submit-button:active {
+  transform: scale(0.95);
+}
+
+.search-submit-button {
+  @apply absolute right-2 p-2 text-gray-400 hover:text-blue-600 cursor-pointer;
+  @apply transition-colors duration-200;
+}
+
+/* Submit button animated background */
+.search-submit-button-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgb(139, 92, 246), rgb(147, 51, 234));
+  opacity: 0;
+  transition: opacity 0.5s;
+  border-radius: 9999px;
+}
+
+.search-submit-button:hover .search-submit-button-bg {
+  opacity: 1;
+}
+
+/* Submit button icon */
+.search-submit-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: all 0.5s;
+  position: relative;
+  z-index: 10;
+}
+
+.search-submit-icon.large {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.search-submit-button:hover .search-submit-icon {
+  transform: rotate(-45deg) scale(1.1) translateY(-0.25rem);
+}
+
+.search-submit-button.hovered .search-submit-icon {
+  transform: rotate(-45deg) scale(1.1) translateY(-0.25rem);
+}
+
+.search-submit-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0);
+  transition: transform 0.3s;
+}
+
+.search-submit-button:active .search-submit-ripple {
+  transform: scale(1);
+}
+
+/* Dropdown menu */
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05), 0 0 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgb(243, 244, 246);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top;
+  z-index: 999999 !important;
+  max-height: 25rem;
+}
+
+.search-dropdown.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.search-dropdown.closed {
+  opacity: 0;
+  transform: translateY(-0.5rem) scale(0.95);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Search dropdown overlay styles */
+.search-dropdown-overlay {
+  /* Максимальный z-index для перекрытия всех элементов */
+  z-index: 999999 !important;
+
+  /* Позволяет выходить за границы любых родительских контейнеров */
+  position: fixed !important;
+
+  /* Убирает ограничения overflow от родительских элементов */
+  overflow: visible !important;
+
+  /* Обеспечиваем полную видимость */
+  visibility: visible !important;
+
+  /* Убирает любые ограничения по высоте */
+  max-height: none !important;
+
+  /* Позволяем элементу расширяться */
+  contain: none !important;
+}
+
+/* Backdrop for dropdown меню */
+.search-dropdown-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(2px);
+  z-index: 999998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.search-dropdown-backdrop.active {
+  opacity: 1;
+}
+
+/* Dropdown content */
+.search-dropdown-content {
+  max-height: 24rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.search-dropdown-content {
+  /* Позволяем контенту выходить за границы экрана если нужно */
+  max-width: none !important;
+
+  /* Убираем ограничения по высоте */
+  max-height: 80vh !important;
+
+  /* Добавляем скролл если контент слишком большой */
+  overflow-y: auto;
+
+  /* Улучшаем производительность скролла */
+  -webkit-overflow-scrolling: touch;
+
+  /* Убираем отступы от краев экрана на мобильных */
+  margin: 0 !important;
+
+  /* Базовые стили */
+  @apply bg-white rounded-lg shadow-xl border border-gray-200;
+}
+
+/* Dropdown header */
+.search-dropdown-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgb(243, 244, 246);
+  background: linear-gradient(to right, rgb(236, 253, 245), rgb(240, 253, 250));
+}
+
+.search-dropdown-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(31, 41, 55);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-dropdown-title-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: rgb(16, 185, 129);
+}
+
+.search-dropdown-subtitle {
+  font-size: 0.875rem;
+  color: rgb(75, 85, 99);
+  margin-top: 0.25rem;
+}
+
+/* Dropdown sections */
+.search-dropdown-sections {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.search-dropdown-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-dropdown-section-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(107, 114, 128);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-dropdown-section-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Suggestion grid */
+.search-suggestions-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.search-suggestions {
+  @apply p-4 space-y-3;
+}
+
+@media (min-width: 640px) {
+  .search-suggestions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 640px) {
+  .search-categories-grid {
+    @apply grid-cols-3;
+  }
+}
+
+@media (min-width: 768px) {
+  .search-categories-grid {
+    @apply grid-cols-4;
+  }
+}
+
+/* Suggestion item */
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid;
+  transition: all 0.2s;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-suggestion-item:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.search-suggestion-item:active {
+  transform: scale(0.95);
+}
+
+.search-suggestion-item {
+  @apply px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer;
+  @apply transition-colors duration-200;
+}
+
+.search-suggestion-item:hover {
+  @apply bg-blue-50 text-blue-700;
+}
+
+/* Suggestion item variants */
+.search-suggestion-category {
+  background: rgb(239, 246, 255);
+  color: rgb(29, 78, 216);
+  border-color: rgb(191, 219, 254);
+}
+
+.search-suggestion-city {
+  background: rgb(240, 253, 244);
+  color: rgb(21, 128, 61);
+  border-color: rgb(187, 247, 208);
+}
+
+.search-suggestion-food {
+  background: rgb(255, 247, 237);
+  color: rgb(194, 65, 12);
+  border-color: rgb(254, 215, 170);
+}
+
+.search-suggestion-popular {
+  background: rgb(250, 245, 255);
+  color: rgb(126, 34, 206);
+  border-color: rgb(221, 214, 254);
+}
+
+.search-suggestion-icon {
+  flex-shrink: 0;
+}
+
+.search-suggestion-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dropdown footer */
+.search-dropdown-footer {
+  padding: 0.75rem 1.5rem;
+  background: rgb(249, 250, 251);
+  border-top: 1px solid rgb(243, 244, 246);
+}
+
+.search-dropdown-footer-text {
+  font-size: 0.75rem;
+  color: rgb(107, 114, 128);
+  text-align: center;
+}
+
+/* Sticky search styles */
+.search-sticky-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgb(229, 231, 235);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999999;
+}
+
+.search-sticky-container.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.search-sticky-container.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.search-sticky-content {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+}
+
+.search-sticky-wrapper {
+  max-width: 32rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Sticky search input wrapper */
+.search-sticky-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 9999px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgb(229, 231, 235);
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.search-sticky-input-wrapper:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.search-sticky-input-wrapper.focused {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Sticky search components - smaller sizes */
+.search-sticky-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: white;
+  border-radius: 9999px;
+  margin-left: 0.25rem;
+}
+
+.search-sticky-icon {
+  color: rgb(156, 163, 175);
+  width: 1rem;
+  height: 1rem;
+}
+
+.search-sticky-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgb(17, 24, 39);
+}
+
+.search-sticky-input::placeholder {
+  color: rgb(107, 114, 128);
+}
+
+.search-sticky-clear-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: rgb(156, 163, 175);
+  transition: color 0.2s;
+  margin-right: 0.5rem;
+}
+
+.search-sticky-clear-button:hover {
+  color: rgb(75, 85, 99);
+}
+
+.search-sticky-clear-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.search-sticky-submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: white;
+  font-weight: 500;
+  border-radius: 9999px;
+  margin-right: 0.25rem;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to right, rgb(16, 185, 129), rgb(20, 184, 166));
+}
+
+.search-sticky-submit-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, rgb(5, 150, 105), rgb(17, 94, 89));
+}
+
+.search-sticky-submit-button:active {
+  transform: scale(0.95);
+}
+
+.search-sticky-submit-icon {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.3s;
+}
+
+.search-sticky-submit-button:hover .search-sticky-submit-icon {
+  transform: rotate(-45deg);
+}
+
+/* Sticky search container */
+.sticky-search-container {
+  overflow: visible !important;
+  position: relative;
+  z-index: 999999;
+}
+
+/* Hero section search styles */
+.hero-search-container {
+  overflow: visible !important;
+  position: relative;
+}
+
+/* Sticky search specific styles */
+.sticky-search {
+  @apply fixed top-0 left-0 right-0 bg-white shadow-md;
+  @apply transition-all duration-300;
+  z-index: 999999;
+}
+
+.sticky-search-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4;
+}
+
+/* Search filters */
+.search-filters {
+  @apply flex flex-wrap gap-2 p-4 border-t border-gray-100;
+}
+
+.search-filter-tag {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800;
+}
+
+.search-filter-remove {
+  @apply ml-2 w-4 h-4 text-blue-600 hover:text-blue-800 cursor-pointer;
+}
+
+/* Search history */
+.search-history {
+  @apply p-4 border-b border-gray-100;
+}
+
+.search-history-title {
+  @apply text-sm font-medium text-gray-900 mb-3;
+}
+
+.search-history-list {
+  @apply space-y-2;
+}
+
+.search-history-item {
+  @apply flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded-lg;
+}
+
+.search-history-text {
+  @apply text-sm text-gray-700 cursor-pointer;
+}
+
+.search-history-remove {
+  @apply w-4 h-4 text-gray-400 hover:text-gray-600 cursor-pointer;
+}
+
+/* Search shortcuts */
+.search-shortcuts {
+  @apply p-4 border-t border-gray-100;
+}
+
+.search-shortcuts-title {
+  @apply text-sm font-medium text-gray-900 mb-3;
+}
+
+.search-shortcuts-grid {
+  @apply grid grid-cols-2 gap-2;
+}
+
+.search-shortcut-item {
+  @apply px-3 py-2 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100;
+  @apply cursor-pointer transition-colors duration-200;
+}
+
+/* Advanced search toggle */
+.search-advanced-toggle {
+  @apply flex items-center justify-between p-4 border-t border-gray-100 hover:bg-gray-50;
+  @apply cursor-pointer transition-colors duration-200;
+}
+
+.search-advanced-title {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.search-advanced-icon {
+  @apply w-4 h-4 text-gray-500 transition-transform duration-200;
+}
+
+.search-advanced-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Ensure body doesn't scroll when dropdown is open */
+body.search-dropdown-open {
+  overflow: visible !important;
+}
+
+/* Стили для hero секции */
+.hero-section-container {
+  overflow: visible !important;
+  position: relative;
+}
+
+/* Стили для улучшения видимости dropdown на разных фонах */
+.search-dropdown-shadow {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05), 0 0 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Accessibility improvements */
+.search-input:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .search-input {
+    @apply border-gray-800;
+  }
+
+  .search-dropdown-content {
+    @apply border-gray-800;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .search-dropdown-enter,
+  .search-dropdown-exit,
+  .search-suggestion-item,
+  .search-category-item {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Animation for dropdown appearance */
+@keyframes searchDropdownSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes searchDropdownSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.95);
+  }
+}
+
+.search-dropdown.animating-in {
+  animation: searchDropdownSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.search-dropdown.animating-out {
+  animation: searchDropdownSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Search categories */
+.search-categories-grid {
+  @apply grid grid-cols-2 gap-3 p-4;
+}
+
+.search-category-item {
+  @apply p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50;
+  @apply transition-all duration-200 cursor-pointer;
+}
+
+.search-category-item:hover {
+  transform: translateY(-1px);
+  @apply shadow-md;
+}
+
+.search-category-icon {
+  @apply w-8 h-8 mb-2 text-gray-500;
+}
+
+.search-category-title {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.search-category-count {
+  @apply text-xs text-gray-500;
+}
+
+/* Search results */
+.search-results {
+  @apply p-4 space-y-2;
+}
+
+.search-result-item {
+  @apply p-3 hover:bg-gray-50 rounded-lg cursor-pointer;
+  @apply transition-colors duration-200;
+}
+
+.search-result-title {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.search-result-excerpt {
+  @apply text-xs text-gray-600 mt-1;
+}
+
+/* Search loading state */
+.search-loading {
+  @apply p-4 text-center;
+}
+
+.search-loading-spinner {
+  @apply inline-block w-6 h-6 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
+}
+
+/* Search empty state */
+.search-empty {
+  @apply p-8 text-center;
+}
+
+.search-empty-icon {
+  @apply w-12 h-12 mx-auto text-gray-400 mb-4;
+}
+
+.search-empty-title {
+  @apply text-lg font-semibold text-gray-900 mb-2;
+}
+
+.search-empty-description {
+  @apply text-gray-600;
+}
+
+/* Search dropdown visibility states */
+.search-dropdown-visible {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.search-dropdown-hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 640px) {
+  .search-dropdown-content {
+    /* На мобильных устройствах ограничиваем ширину */
+    max-width: calc(100vw - 2rem) !important;
+
+    /* Центрируем по горизонтали */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .search-input {
+    @apply text-base; /* Prevents zoom on iOS */
+  }
+
+  .search-categories-grid {
+    @apply grid-cols-1 gap-2;
+  }
+}

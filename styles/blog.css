@@ -1,0 +1,281 @@
+/* Blog-specific styles (excluding preview and search which have their own files) */
+
+/* Blog hero section specific styles */
+.blog-hero-background {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Blog categories section */
+.blog-categories-section {
+  @apply transition-all duration-500;
+  position: relative;
+  z-index: 1;
+}
+
+/* When blog preview is expanded, push categories down */
+.blog-categories-section.preview-expanded {
+  transform: translateY(80px);
+}
+
+/* Blog categories grid */
+.blog-categories-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.blog-category-card {
+  @apply bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer;
+}
+
+.blog-category-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Blog posts grid */
+.blog-posts-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+  position: relative;
+}
+
+/* Blog loading states */
+.blog-loading-skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+.blog-loading-card {
+  @apply bg-white rounded-xl shadow-md overflow-hidden;
+}
+
+/* Blog empty states */
+.blog-empty-state {
+  @apply text-center py-12;
+}
+
+.blog-empty-icon {
+  @apply w-16 h-16 mx-auto text-gray-400 mb-4;
+}
+
+.blog-empty-title {
+  @apply text-xl font-semibold text-gray-900 mb-2;
+}
+
+.blog-empty-description {
+  @apply text-gray-600;
+}
+
+/* Blog pagination styles */
+.blog-pagination {
+  @apply flex items-center justify-center space-x-2 mt-8;
+}
+
+.blog-pagination-button {
+  @apply px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors;
+}
+
+.blog-pagination-button.active {
+  @apply bg-emerald-500 text-white border-emerald-500;
+}
+
+.blog-pagination-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Blog category badge styles */
+.blog-category-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.blog-category-culture {
+  @apply bg-purple-100 text-purple-800;
+}
+
+.blog-category-travel {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.blog-category-food {
+  @apply bg-orange-100 text-orange-800;
+}
+
+.blog-category-nature {
+  @apply bg-green-100 text-green-800;
+}
+
+.blog-category-tips {
+  @apply bg-emerald-100 text-emerald-800;
+}
+
+/* Blog hero section */
+.blog-hero-container {
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Blog content wrapper */
+.blog-content-wrapper {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  position: relative;
+}
+
+/* Blog section spacing */
+.blog-section {
+  @apply py-8 sm:py-12;
+}
+
+/* Blog article layout */
+.blog-article {
+  @apply max-w-4xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.blog-article-header {
+  @apply text-center py-12;
+}
+
+.blog-article-title {
+  @apply text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6;
+}
+
+.blog-article-meta {
+  @apply flex items-center justify-center space-x-6 text-gray-500 mb-8;
+}
+
+.blog-article-content {
+  @apply prose prose-lg max-w-none;
+}
+
+/* Blog sidebar */
+.blog-sidebar {
+  @apply space-y-8;
+}
+
+.blog-sidebar-section {
+  @apply bg-white rounded-xl p-6 shadow-md;
+}
+
+.blog-sidebar-title {
+  @apply text-lg font-semibold text-gray-900 mb-4;
+}
+
+/* Blog related posts */
+.blog-related-posts {
+  @apply mt-16 py-12 border-t border-gray-200;
+}
+
+.blog-related-title {
+  @apply text-2xl font-bold text-gray-900 mb-8 text-center;
+}
+
+/* Blog comments section */
+.blog-comments {
+  @apply mt-16 py-12 border-t border-gray-200;
+}
+
+.blog-comments-title {
+  @apply text-2xl font-bold text-gray-900 mb-8;
+}
+
+.blog-comment {
+  @apply border-b border-gray-200 py-6 last:border-b-0;
+}
+
+.blog-comment-author {
+  @apply flex items-center mb-4;
+}
+
+.blog-comment-avatar {
+  @apply w-10 h-10 rounded-full mr-4;
+}
+
+.blog-comment-name {
+  @apply font-semibold text-gray-900;
+}
+
+.blog-comment-date {
+  @apply text-sm text-gray-500 ml-auto;
+}
+
+.blog-comment-content {
+  @apply text-gray-700 leading-relaxed;
+}
+
+/* Blog newsletter signup */
+.blog-newsletter {
+  @apply bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-8 text-white text-center;
+}
+
+.blog-newsletter-title {
+  @apply text-2xl font-bold mb-4;
+}
+
+.blog-newsletter-description {
+  @apply text-blue-100 mb-6;
+}
+
+.blog-newsletter-form {
+  @apply flex flex-col sm:flex-row gap-4 max-w-md mx-auto;
+}
+
+.blog-newsletter-input {
+  @apply flex-1 px-4 py-3 rounded-lg border-0 text-gray-900;
+  @apply focus:outline-none focus:ring-2 focus:ring-white/50;
+}
+
+.blog-newsletter-button {
+  @apply px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg;
+  @apply hover:bg-blue-50 transition-colors duration-200;
+}
+
+/* Blog tags cloud */
+.blog-tags-cloud {
+  @apply flex flex-wrap gap-2;
+}
+
+.blog-tag {
+  @apply inline-block px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full;
+  @apply hover:bg-gray-200 transition-colors duration-200 cursor-pointer;
+}
+
+.blog-tag.popular {
+  @apply text-base font-medium;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .blog-posts-grid {
+    @apply grid-cols-1 gap-6;
+  }
+
+  .blog-categories-grid {
+    @apply grid-cols-1 gap-4;
+  }
+
+  .blog-article-title {
+    @apply text-2xl;
+  }
+
+  .blog-newsletter-form {
+    @apply flex-col;
+  }
+}
+
+/* Dark mode support for blog sections */
+@media (prefers-color-scheme: dark) {
+  .blog-category-card,
+  .blog-sidebar-section,
+  .blog-loading-card {
+    @apply bg-gray-800 text-white;
+  }
+
+  .blog-empty-title,
+  .blog-article-title,
+  .blog-sidebar-title {
+    @apply text-white;
+  }
+
+  .blog-empty-description {
+    @apply text-gray-300;
+  }
+}
